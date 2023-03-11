@@ -1,12 +1,13 @@
-const haefeliForm = {
+const testForm = {
     requestName: 'winno',
     steps: [
         {
             label: 'Persönliche Daten',
             stepId: 'personal',
+            display: true,
             rows: [
                 {
-                    elements: [
+                    elements:[
                         {
                             type: 'text',
                             placeholder: 'Vorname',
@@ -20,6 +21,7 @@ const haefeliForm = {
                             placeholder: 'Nachname',
                             required: true,
                             autocomplete: 'family-name',
+                            label: 'Nachname',
                             name: 'name',
                         }
                     ]
@@ -58,12 +60,84 @@ const haefeliForm = {
                             name: 'nachricht',
                         },
                     ]
-                }
+                }, 
+                {
+                    elements: [
+                        {
+                            type: 'radio',
+                            name: 'umzugsTyp',
+                            options: [
+                                {
+                                    id: 'privatumzug',
+                                    required: true,
+                                    label: 'Privatumzug',
+                                    value: false,
+                                    action: 'toggleSteps(["auszugsort","einzugsort"],["auszugsortFirma","einzugsortFirma"])'
+                                },
+                                {
+                                    id: 'firmenumzug',
+                                    required: false,
+                                    label: 'Firmenumzug',
+                                    value: false,
+                                    action: 'toggleSteps(["auszugsortFirma","einzugsortFirma"],["auszugsort","einzugsort"])'
+                                },
+                                {
+                                    id: 'keinUmzug',
+                                    required: false,
+                                    label: 'Kein Umzug',
+                                    value: false,
+                                    action: 'toggleSteps([""],["auszugsortFirma","einzugsortFirma","auszugsort","einzugsort"])'
+                                },
+                            ]
+                        }
+                    ]
+                },
+                {
+                    elements: [
+                        {
+                            type: 'checkbox',
+                            name: 'weitereAngebote',
+                            options: [
+                                {
+                                    id: 'reinigung',
+                                    label: 'Reinigung',
+                                    value: false,
+                                    action: 'toggleSteps(["reinigung"],[""])'
+                                },
+                                {
+                                    id: 'lagerung',
+                                    label: 'Lagerung',
+                                    value: false,
+                                    action: 'toggleSteps(["lagerung"],[""])'
+                                },
+                                {
+                                    id: 'treppensteiger',
+                                    label: 'Treppensteiger',
+                                    value: false,
+                                    action: 'toggleSteps(["treppensteiger"],[""])'
+                                },
+                                {
+                                    id: 'moebellift',
+                                    label: 'Möbellift',
+                                    value: false,
+                                    action: 'toggleSteps(["moebellift"],[""])'
+                                },
+                                {
+                                    id: 'entsorgung',
+                                    label: 'Entsorgung',
+                                    value: false,
+                                    action: 'toggleSteps(["entsorgung"],[""])'
+                                },
+                            ]
+                        }
+                    ]
+                },
             ]
         },
         {
             label: 'Auszugsort',
             stepId: 'auszugsort',
+            display: false,
             rows: [
                 {
                     elements: [
@@ -182,6 +256,7 @@ const haefeliForm = {
         {
             label: 'Einzugsort',
             stepId: 'einzugsort',
+            display: false,
             rows: [
                 {
                     elements: [
@@ -281,7 +356,8 @@ const haefeliForm = {
         },
         {
             label: 'Auszugsort Firma',
-            stepId: 'auszugsort firma',
+            stepId: 'auszugsortFirma',
+            display: false,
             rows: [
                 {
                     elements: [
@@ -392,7 +468,8 @@ const haefeliForm = {
         },
         {
             label: 'Einzugsort Firma',
-            stepId: 'einzugsort firma',
+            stepId: 'einzugsortFirma',
+            display: false,
             rows: [
                 {
                     elements: [
@@ -845,5 +922,5 @@ const haefeliForm = {
     ]
 };
 
-const geckoForm = new GeckoForm(haefeliForm, '#test-gecko-form', '.wr_btn--submit', '.lyt--form-steps');
+const geckoForm = new GeckoForm(testForm, '#test-gecko-form', '.wr_btn--submit', '.wr_btn--form-back', '.lyt--form-steps');
 geckoForm.buildGeckoForm();
