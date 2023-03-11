@@ -228,7 +228,7 @@ const testForm = {
                     elements: [
                         {
                             type: 'text',
-                            placeholder: 'dd.mm.yyyy',
+                            placeholder: 'privat oder firma',
                             required: false,
                             label: 'Der Umzug wird bezahlt von',
                             name: 'auszug_bezahlung',
