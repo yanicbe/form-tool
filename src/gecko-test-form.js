@@ -234,10 +234,11 @@ class GeckoForm {
                 this.cleanData(selectedValues);
             }
             $.ajax({
-                url: 'https://us-central1-winno-mail-service.cloudfunctions.net/sendHaefeli',
-                // url: `https://ltavphiuzenejhnrbxvl.functions.supabase.co/mail-service?name=${this.formJson.requestName}`,
+                // url: 'https://us-central1-winno-mail-service.cloudfunctions.net/sendHaefeli',
+                url: `https://ltavphiuzenejhnrbxvl.functions.supabase.co/mail-service?name=${this.formJson.requestName}`,
                 method: 'POST',
                 contentType: 'application/json',
+                authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp3dHpvbXR1cnJ0amNrcXpncnN1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2Nzg0NjE4NDAsImV4cCI6MTk5NDAzNzg0MH0.K2Y_CMi3M6ZkHoebXGLfLffRncrilb57CI9Wx9_oL4o',
                 data: JSON.stringify(this.geckoRequest),
                 success: function(response) {
                     console.log('Response:', response);
@@ -381,9 +382,9 @@ class GeckoForm {
     generateRadioFormItem(json) {
         let content = '';
 
-        const label = json.label ?? '';
+        const title = json.title ?? '';
 
-        content += `<p class="${gecko_class_label}">${label}</p>`;
+        content += `<p class="h--xs">${title}</p>`;
 
         content += `<div class="${gecko_class_radioButtonGroupComponent} cmp">`;
             content += `<div class="${gecko_class_radioButtonGroupLayout} lyt">`;
@@ -407,9 +408,9 @@ class GeckoForm {
     generateCheckboxFormItem(json) {
         let content = '';
 
-        const label = json.label ?? '';
+        const title = json.title ?? '';
 
-        content += `<p class="${gecko_class_label}">${label}</p>`;
+        content += `<p class="h--xs">${title}</p>`;
 
         content += `<div class="${gecko_class_checkboxGroupComponent} cmp">`;
             content += `<div class="${gecko_class_checkboxGroupLayout} lyt">`;
@@ -537,6 +538,7 @@ const testForm = {
                         {
                             type: 'radio',
                             name: 'umzugsTyp',
+                            title: 'Art des Umzugs',
                             options: [
                                 {
                                     id: 'privatumzug',
@@ -568,6 +570,7 @@ const testForm = {
                         {
                             type: 'checkbox',
                             name: 'weitereAngebote',
+                            title: 'Weitere Leistungen',
                             options: [
                                 {
                                     id: 'reinigung',
