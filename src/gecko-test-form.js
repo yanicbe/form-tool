@@ -209,8 +209,6 @@ class GeckoForm {
         currentStep.rows.forEach(row => {
             row.elements.forEach(element => {
                 const currentSelector = `${currentStepSelector} ${gecko_selector_inputElement}[name="${element.name}"]`;
-                // isValid = this.validate: check for type and make different validation methods
-                // const value = $(currentSelector).val()?.trim() != '' ? $(currentSelector).val() : null;
                 const value = this.validate($(currentSelector)) ? $(currentSelector).val() : null;
                 if(value != null) categoryRequestObject.children.push({ name: element.name, value: value });
 
@@ -222,9 +220,10 @@ class GeckoForm {
         });
 
         if(error) {
-            // OTHER ERROR OPTIONS
+            document.getElementsByClassName('wr_p--error')[0].classList.remove('hidden');
             return;
         }
+        document.getElementsByClassName('wr_p--error')[0].classList.add('hidden');
 
         this.geckoRequest.data.categories.push(categoryRequestObject);
         
