@@ -209,7 +209,9 @@ class GeckoForm {
         currentStep.rows.forEach(row => {
             row.elements.forEach(element => {
                 const currentSelector = `${currentStepSelector} ${gecko_selector_inputElement}[name="${element.name}"]`;
-                const value = $(currentSelector).val()?.trim() != '' ? $(currentSelector).val() : null;
+                // isValid = this.validate: check for type and make different validation methods
+                // const value = $(currentSelector).val()?.trim() != '' ? $(currentSelector).val() : null;
+                const value = this.validate($(currentSelector)) ? $(currentSelector).val() : null;
                 if(value != null) categoryRequestObject.children.push({ name: element.name, value: value });
 
                 if(element.required == true && value == null) {
@@ -223,27 +225,48 @@ class GeckoForm {
             // OTHER ERROR OPTIONS
             return;
         }
-        
-        document.getElementsByClassName(this.backButtonSelector.replace('.', ''))[0].setAttribute('submit', 'enabled');
-        this.geckoRequest.data.categories.push(categoryRequestObject);
-        selectedValues[this.clicksForward].querySelector('[form-step="active"]').setAttribute('form-step', 'done');
-        this.clicksForward += 1;
 
-        if(this.clicksForward >= selectedValues.length) {
+        this.geckoRequest.data.categories.push(categoryRequestObject);
+        
+        if(this.clicksForward >= selectedValues.length - 1) {
             if(selectedValues.length !== this.geckoRequest.data.categories.length) {
                 this.cleanData(selectedValues);
             }
             const settings = this.getSettings();
-            $.ajax(settings).done(function (response) {
-                console.log(response);
-            });
+            $.ajax(settings);
         } else {
+            this.clicksForward += 1;
             selectedValues[this.clicksForward].querySelector('[form-step="disabled"]').setAttribute('form-step', 'active');
             this.activateCurrentStep(selectedValues[this.clicksForward].getAttribute('stepheaderid'));
+            document.getElementsByClassName(this.backButtonSelector.replace('.', ''))[0].setAttribute('submit', 'enabled');
+            selectedValues[this.clicksForward].querySelector('[form-step="active"]').setAttribute('form-step', 'done');
         }
     }
 
+    validate(el) {
+        const inputType = el.attr('type');
+        if(inputType === 'email') {
+            return /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(el.val().trim());
+        } 
+        if(inputType === 'tel') {
+            return /(\b(0041|0)|\B\+41)(\s?\(0\))?(\s)?[1-9]{2}(\s)?[0-9]{3}(\s)?[0-9]{2}(\s)?[0-9]{2}\b/.test(el.val().trim());
+        } 
+        if(inputType === 'radio' || inputType === 'checkbox') {
+            return true; 
+        }
+        return el.val()?.trim() != '';
+    }
+
+    secondLast(selectedValues) {
+        return this.clicksForward + 1 === selectedValues.length;
+    }
+
     getSettings() {
+        const removeForm = () => {
+            document.getElementsByClassName('cmp--btn-group')[0].classList.add('hidden');
+            document.getElementById('test-gecko-form').classList.add('hidden');
+            document.getElementsByClassName('cmp--form-steps')[0].classList.add('hidden');
+        };
         return {
             'url': `https://zwtzomturrtjckqzgrsu.functions.supabase.co/mail-service?name=${this.formJson.requestName}`,
             'method': 'POST',
@@ -253,6 +276,14 @@ class GeckoForm {
               'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp3dHpvbXR1cnJ0amNrcXpncnN1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2Nzg0NjE4NDAsImV4cCI6MTk5NDAzNzg0MH0.K2Y_CMi3M6ZkHoebXGLfLffRncrilb57CI9Wx9_oL4o'
             },
             'data': `${JSON.stringify(this.geckoRequest)}`,
+            success: function() {
+                removeForm();
+                document.getElementsByClassName('cd--msg-success')[0].parentElement.classList.remove('hidden');
+                document.getElementsByClassName('cd--msg-error')[0].parentElement.classList.add('hidden');
+            },
+            error: function() {
+                document.getElementsByClassName('cd--msg-error')[0].parentElement.classList.remove('hidden');
+            }
         };
     }
 
