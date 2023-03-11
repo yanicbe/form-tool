@@ -13,7 +13,7 @@ const testForm = {
                             placeholder: 'Vorname',
                             required: true,
                             autocomplete: 'given-name',
-                            label: 'Name',
+                            label: 'Name *',
                             name: 'surname',
                         },
                         {
@@ -21,7 +21,7 @@ const testForm = {
                             placeholder: 'Nachname',
                             required: true,
                             autocomplete: 'family-name',
-                            label: 'Nachname',
+                            label: 'Nachname *',
                             name: 'name',
                         }
                     ]
@@ -33,7 +33,7 @@ const testForm = {
                             placeholder: 'max.muster@company.com',
                             required: true,
                             autocomplete: 'email',
-                            label: 'E-Mail',
+                            label: 'E-Mail *',
                             name: 'email',
                         },
                     ]
@@ -45,7 +45,7 @@ const testForm = {
                             placeholder: '+41 00 000 00 00',
                             required: true,
                             autocomplete: 'tel',
-                            label: 'Telefonnummer',
+                            label: 'Telefonnummer *',
                             name: 'telefon',
                         },
                     ]

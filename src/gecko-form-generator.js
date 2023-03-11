@@ -235,11 +235,11 @@ class GeckoForm {
             const settings = this.getSettings();
             $.ajax(settings);
         } else {
+            selectedValues[this.clicksForward].querySelector('[form-step="active"]').setAttribute('form-step', 'done');
             this.clicksForward += 1;
             selectedValues[this.clicksForward].querySelector('[form-step="disabled"]').setAttribute('form-step', 'active');
             this.activateCurrentStep(selectedValues[this.clicksForward].getAttribute('stepheaderid'));
             document.getElementsByClassName(this.backButtonSelector.replace('.', ''))[0].setAttribute('submit', 'enabled');
-            selectedValues[this.clicksForward].querySelector('[form-step="active"]').setAttribute('form-step', 'done');
         }
     }
 
