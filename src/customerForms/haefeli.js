@@ -845,7 +845,5 @@ const haefeliForm = {
     ]
 };
 
-function init() {
-    const geckoForm = new GeckoForm(haefeliForm, '#test-gecko-form', '.wr_btn--submit', '.lyt--form-steps');
-    geckoForm.buildGeckoForm();
-}
+const geckoForm = new GeckoForm(haefeliForm, '#test-gecko-form', '.wr_btn--submit', '.lyt--form-steps');
+geckoForm.buildGeckoForm();

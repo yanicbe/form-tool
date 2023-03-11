@@ -1,4 +1,5 @@
 1) CSS wrap (Philipp)
-2) radio buttons: privatumzug, firmenumzug, kein umzug
-3) checkboxes: Reinigung, Lagerung, Treppensteiger, Möbellift, Entsorgung
-4) steps back clickable
+2) radio buttons: privatumzug, firmenumzug, kein umzug - done
+3) checkboxes: Reinigung, Lagerung, Treppensteiger, Möbellift, Entsorgung - done
+4) send email - done
+5) steps back clickable

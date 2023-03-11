@@ -38,7 +38,7 @@ const gecko_class_checkboxLayout = 'lyt--cb';
 const gecko_class_checkbox = 'cb';
 
 // eslint-disable-next-line no-unused-vars
-class GeckoForm {
+class GeckoForm2 {
     constructor(formJson, formSelector, submitButtonSelector, formStepsSelector) {
         this.formJson = formJson;
         this.formSelector = formSelector;
@@ -289,7 +289,7 @@ class GeckoForm {
             json.options.forEach(option => {
                 content += `<div class="${gecko_class_checkboxComponent} cmp">`;
                     content += `<div class="${gecko_class_checkboxLayout} lyt">`;
-                        content += `<input id="${option.id}" type="checkbox" name="${json.name}" class="${gecko_class_checkbox}" value="${option.value}">`;
+                        content += `<input id="${option.id}" type="checkbox" name="${json.name}" class="${gecko_class_checkbox}" value="${option.value}" required="${option.required}">`;
                         content += `<label class="${gecko_class_label}" for="${option.id}">${option.label}</label>`;
                     content += '</div>';
                 content += '</div>';
