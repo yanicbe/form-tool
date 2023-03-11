@@ -1,5 +1,5 @@
 const testForm = {
-    requestName: 'haefeli',
+    requestName: 'winno',
     steps: [
         {
             label: 'Persönliche Daten',

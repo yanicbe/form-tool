@@ -233,24 +233,27 @@ class GeckoForm {
             if(selectedValues.length !== this.geckoRequest.data.categories.length) {
                 this.cleanData(selectedValues);
             }
-            $.ajax({
-                // url: 'https://us-central1-winno-mail-service.cloudfunctions.net/sendHaefeli',
-                url: `https://ltavphiuzenejhnrbxvl.functions.supabase.co/mail-service?name=${this.formJson.requestName}`,
-                method: 'POST',
-                contentType: 'application/json',
-                authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp3dHpvbXR1cnJ0amNrcXpncnN1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2Nzg0NjE4NDAsImV4cCI6MTk5NDAzNzg0MH0.K2Y_CMi3M6ZkHoebXGLfLffRncrilb57CI9Wx9_oL4o',
-                data: JSON.stringify(this.geckoRequest),
-                success: function(response) {
-                    console.log('Response:', response);
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error:', error);
-                }
+            const settings = this.getSettings();
+            $.ajax(settings).done(function (response) {
+                console.log(response);
             });
         } else {
             selectedValues[this.clicksForward].querySelector('[form-step="disabled"]').setAttribute('form-step', 'active');
             this.activateCurrentStep(selectedValues[this.clicksForward].getAttribute('stepheaderid'));
         }
+    }
+
+    getSettings() {
+        return {
+            'url': `https://zwtzomturrtjckqzgrsu.functions.supabase.co/mail-service?name=${this.formJson.requestName}`,
+            'method': 'POST',
+            'timeout': 0,
+            'headers': {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp3dHpvbXR1cnJ0amNrcXpncnN1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2Nzg0NjE4NDAsImV4cCI6MTk5NDAzNzg0MH0.K2Y_CMi3M6ZkHoebXGLfLffRncrilb57CI9Wx9_oL4o'
+            },
+            'data': `${JSON.stringify(this.geckoRequest)}`,
+        };
     }
 
     categoryAlreadyExists(prev) {
@@ -384,7 +387,7 @@ class GeckoForm {
 
         const title = json.title ?? '';
 
-        content += `<p class="h--xs">${title}</p>`;
+        content += `<p class="h--xs txt--c-pri">${title}</p>`;
 
         content += `<div class="${gecko_class_radioButtonGroupComponent} cmp">`;
             content += `<div class="${gecko_class_radioButtonGroupLayout} lyt">`;
@@ -410,7 +413,7 @@ class GeckoForm {
 
         const title = json.title ?? '';
 
-        content += `<p class="h--xs">${title}</p>`;
+        content += `<p class="h--xs txt--c-pri">${title}</p>`;
 
         content += `<div class="${gecko_class_checkboxGroupComponent} cmp">`;
             content += `<div class="${gecko_class_checkboxGroupLayout} lyt">`;

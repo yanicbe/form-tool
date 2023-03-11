@@ -1,5 +1,2 @@
-1) CSS wrap (Philipp)
-2) radio buttons: privatumzug, firmenumzug, kein umzug - done
-3) checkboxes: Reinigung, Lagerung, Treppensteiger, Möbellift, Entsorgung - done
-4) send email - done
-5) steps back clickable
+"{"data":{"categories":[{"name":"personal","children":[{"name":"surname","value":"asdf"},{"name":"name","value":"asdf"},{"name":"email","value":"test@winno.ch"},{"name":"telefon","value":"asdf"}]}]}}"
+"{"data":{"categories":[{"name":"personal","children":[{"name":"surname","value":"asdf"},{"name":"name","value":"asdf"},{"name":"email","value":"test@winno.ch"},{"name":"telefon","value":"asdf"}]}]}}"
