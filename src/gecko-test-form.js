@@ -189,15 +189,18 @@ class GeckoForm {
     moveToNextStep() {
         $(`${this.formSelector} ${gecko_selector_inputElement}`).removeClass(gecko_class_formItemError);
 
-        document.getElementsByClassName(this.backButtonSelector.replace('.', ''))[0].setAttribute('submit', 'enabled');
-        
         const selectedValues = this.getDisplayedItems();
         const prev = selectedValues[this.clicksForward].getAttribute('stepheaderid');
         const currentStep = this.formJson.steps.filter(step => step.stepId == prev)[0];
 
         const currentStepSelector = `${this.formSelector} ${gecko_selector_formComponent}[stepid="${prev}"]`;
-        let categoryRequestObject = {};
 
+        const exists = this.categoryAlreadyExists(prev);
+        if(!(exists < 0)){
+            this.removeCategory(exists);
+        }
+
+        let categoryRequestObject = {};
         categoryRequestObject.name = prev;
         categoryRequestObject.children = [];
 
@@ -221,42 +224,70 @@ class GeckoForm {
             return;
         }
         
+        document.getElementsByClassName(this.backButtonSelector.replace('.', ''))[0].setAttribute('submit', 'enabled');
         this.geckoRequest.data.categories.push(categoryRequestObject);
         selectedValues[this.clicksForward].querySelector('[form-step="active"]').setAttribute('form-step', 'done');
         this.clicksForward += 1;
 
         if(this.clicksForward >= selectedValues.length) {
-            // check if amount of categories is the same as unhidden fields. If not check it and then remove the hidden data
             if(selectedValues.length !== this.geckoRequest.data.categories.length) {
-                const toRemove = [];
-                for (let index = 0; index < this.geckoRequest.data.categories.length; index++) {
-                    const category = this.geckoRequest.data.categories[index];
-                    if(!selectedValues.includes(category.name)) {
-                        toRemove.push(index);
-                    }
-                }
-                for (let index = 0; index < toRemove.length; index++) {
-                    const element = toRemove[index];
-                    this.geckoRequest.data.categories.splice(element - index, 1);
-                }
+                this.cleanData(selectedValues);
             }
-            // $.ajax({
-            //     url: 'https://us-central1-winno-mail-service.cloudfunctions.net/sendHaefeli',
-            //     // url: `https://ltavphiuzenejhnrbxvl.functions.supabase.co/mail-service?name=${this.formJson.requestName}`,
-            //     method: 'POST',
-            //     contentType: 'application/json',
-            //     data: JSON.stringify(this.geckoRequest),
-            //     success: function(response) {
-            //         console.log('Response:', response);
-            //     },
-            //     error: function(xhr, status, error) {
-            //         console.error('Error:', error);
-            //     }
-            // });
+            $.ajax({
+                url: 'https://us-central1-winno-mail-service.cloudfunctions.net/sendHaefeli',
+                // url: `https://ltavphiuzenejhnrbxvl.functions.supabase.co/mail-service?name=${this.formJson.requestName}`,
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(this.geckoRequest),
+                success: function(response) {
+                    console.log('Response:', response);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
         } else {
             selectedValues[this.clicksForward].querySelector('[form-step="disabled"]').setAttribute('form-step', 'active');
             this.activateCurrentStep(selectedValues[this.clicksForward].getAttribute('stepheaderid'));
         }
+    }
+
+    categoryAlreadyExists(prev) {
+        for (let index = 0; index < this.geckoRequest.data.categories.length; index++) {
+            const category = this.geckoRequest.data.categories[index];
+            if(category.name === prev) {
+                return index;
+            }
+        }
+        return -1;
+    }
+
+    removeCategory(index) {
+        this.geckoRequest.data.categories.splice(index, 1);
+    }
+
+    cleanData(selectedValues) {
+        const toRemove = [];
+        const stepheaderids = this.getStepheaderids(selectedValues);
+        for (let index = 0; index < this.geckoRequest.data.categories.length; index++) {
+            const category = this.geckoRequest.data.categories[index];
+            if(!stepheaderids.includes(category.name)) {
+                toRemove.push(index);
+            }
+        }
+        for (let index = 0; index < toRemove.length; index++) {
+            const element = toRemove[index];
+            this.removeCategory(element - index);
+        }
+
+    }
+
+    getStepheaderids(array) {
+        const all = [];
+        for (let index = 0; index < array.length; index++) {
+            all.push(array[index].getAttribute('stepheaderid'));
+        }
+        return all;
     }
 
     getDisplayedItems() {
